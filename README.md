@@ -1,3 +1,32 @@
+# Ketris
+This project is to making a Tetris game for studying reactjs
+
+
+## Getting Started
+- Create react app with typescript
+```
+npx creat-react-app ketris --template typescript
+yarn start
+```
+- Set baseURL in tsconfig.json
+```
+  "compilerOptions": {
+    ...
+    "baseUrl": "./src",
+    ...
+```
+- Set eslint
+```
+npm install -D eslint
+npx eslint --init
+```
+
+
+
+
+
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
