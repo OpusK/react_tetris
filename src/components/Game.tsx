@@ -1,4 +1,5 @@
 import Menu from './Menu';
+import { useGameOver } from "hooks/useGameOver";
 
 type Props = {
   rows: number,
@@ -6,12 +7,21 @@ type Props = {
 };
 
 const Game = ({ rows, columns }: Props): JSX.Element => {
-  const start = () => { alert('Game start!!'); }
+  const [gameOver, setGameOver, resetGameOver] = useGameOver();
+
+  const start = () => {
+    resetGameOver();
+    alert("Game Start!");
+  };
 
   return (
     <div className="Game">
-      <Menu onClick={start} />
-      <p>rows {rows}, columns {columns}</p>
+      {gameOver ? (
+        <Menu onClick={start} />
+      ) : (
+        // <Tetris rows={rows} columns={columns} setGameOver={setGameOver} />
+        <p>rows {rows}, columns {columns}</p>
+      )}
     </div>
   );
 }
