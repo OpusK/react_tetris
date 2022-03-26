@@ -1,0 +1,5 @@
+.BoardCell {
+  width: auto;
+  border-radius: 6px;
+  position: relative;
+}
