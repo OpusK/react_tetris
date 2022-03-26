@@ -1,3 +1,6 @@
+import { useBoard } from "hooks/useBoard";
+import { BoardSize } from "typings";
+import Board from "./Board";
 import "./Tetris.css";
 
 type Props = {
@@ -7,9 +10,11 @@ type Props = {
 };
 
 const Tetris = ({ rows, columns, setGameOver }: Props): JSX.Element => {
+  const [board, setBoard] = useBoard({rows, columns});
+
   return (
     <div className="Tetris">
-      {/* Board */}
+      <Board {...board} />
       {/* GameStats */}
       {/* Previews */}
       {/* GameController */}
