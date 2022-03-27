@@ -11,7 +11,7 @@ const buildGameStats = () => ({
 export const useGameStats = () => {
   const [gameStats, setGameStats] = useState(buildGameStats());
 
-  const addLinesCleared = useCallback((lines) => {
+  const addLinesCleared = useCallback((lines: number) => {
     setGameStats((previous): TetrisStats => {
       const points = previous.points + lines * 100;
       const { linesPerLevel } = previous;
