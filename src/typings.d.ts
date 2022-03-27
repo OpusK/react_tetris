@@ -12,3 +12,10 @@ export interface TetrisBoard {
   rows: Cell[][],
   size: BoardSize,
 }
+
+export interface TetrisStats {
+  level: number;
+  points: number;
+  linesCompleted: number;
+  linesPerLevel: number;
+}
