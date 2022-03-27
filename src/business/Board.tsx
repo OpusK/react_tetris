@@ -1,4 +1,5 @@
-import { BoardSize } from "typings";
+import { BoardSize, TetrisBoard, Player } from "typings";
+import { transferToBoard } from "business/Tetrominoes";
 
 const defaultCell = {
   occupied: false,
@@ -13,5 +14,36 @@ export const buildBoard = ({ rows, columns }: BoardSize) => {
   return {
     rows: builtRows,
     size: { rows, columns }
+  };
+};
+
+type Props = {
+  board: TetrisBoard;
+  player: Player;
+  resetPlayer: () => void;
+  addLinesCleared: (lines: number) => void;
+}
+
+export const nextBoard = ({ board, player, resetPlayer, addLinesCleared }: Props) => {
+  const { tetromino, position } = player;
+
+  // Copy and clear spaces used by pieces that
+  // hadn't collided and occupied spaces permanently
+  let rows = board.rows.map((row) =>
+    row.map((cell) => (cell.occupied ? cell : { ...defaultCell }))
+  );
+
+  rows = transferToBoard({
+    className: tetromino.className,
+    isOccupied: player.collided,
+    position,
+    rows,
+    shape: tetromino.shape
+  });
+
+  // Return the next board
+  return {
+    rows,
+    size: { ...board.size }
   };
 };
