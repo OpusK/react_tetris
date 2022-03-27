@@ -19,3 +19,15 @@ export interface TetrisStats {
   linesCompleted: number;
   linesPerLevel: number;
 }
+export interface Tetromino {
+  shape: number[][],
+  className: string,
+}
+
+export interface Player {
+  collided: boolean,
+  isFastDropping: boolean,
+  position: { row: number, column: number },
+  tetrominoes: Array<Tetromino>,
+  tetromino: Tetromino,
+}
