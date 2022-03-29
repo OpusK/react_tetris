@@ -1,4 +1,7 @@
 import { TetrisBoard, TetrisStats, Player } from "typings";
+import { Action, actionForKey, actionIsDrop } from "business/Input";
+import { PlayerController } from "business/PlayerController";
+import "./GameController.css";
 
 type Props = {
   board: TetrisBoard;
@@ -16,13 +19,24 @@ const GameController = ({
   setPlayer,
 }: Props) => {
   const onKeyUp = ({ code }: React.KeyboardEvent<HTMLInputElement>) => {
-    if (code === "KeyQ") {
+    if (actionForKey(code) === Action.Quit) {
       setGameOver(true);
     }
   };
 
   const onKeyDown = ({ code }: React.KeyboardEvent<HTMLInputElement>) => {
     console.log(`onKeyDown ${code}`);
+    handleInput(actionForKey(code));
+  };
+
+  const handleInput = ( action: string ) => {
+    PlayerController({
+      action,
+      board,
+      player,
+      setPlayer,
+      setGameOver
+    });
   };
 
   return (
