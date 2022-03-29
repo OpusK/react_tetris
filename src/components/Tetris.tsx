@@ -14,13 +14,12 @@ type Props = {
   setGameOver: React.Dispatch<React.SetStateAction<boolean>>,
 };
 
-const Tetris = ({ rows, columns, setGameOver }: Props): JSX.Element => {
+const Tetris = ({ rows, columns, setGameOver }: Props) => {
   const [gameStats, addLinesCleared] = useGameStats();
   const [player, setPlayer, resetPlayer] = usePlayer();
   const [board, setBoard] = useBoard({
     rows, columns, player, resetPlayer, addLinesCleared,
   });
-  console.log(player.tetrominoes);
 
   return (
     <div className="Tetris">
