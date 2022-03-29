@@ -1,7 +1,9 @@
+import "./GameController.css";
 import { TetrisBoard, TetrisStats, Player } from "typings";
 import { Action, actionForKey, actionIsDrop } from "business/Input";
 import { PlayerController } from "business/PlayerController";
-import "./GameController.css";
+import { useDropTime } from "hooks/useDropTime";
+import { useInterval } from "hooks/useInterval";
 
 type Props = {
   board: TetrisBoard;
@@ -18,6 +20,10 @@ const GameController = ({
   setGameOver,
   setPlayer,
 }: Props) => {
+  const [dropTime, pauseDropTime, resumeDropTime] = useDropTime({ gameStats });
+
+  useInterval({ callback: () => { handleInput(Action.SlowDrop); }, delay: dropTime });
+
   const onKeyUp = ({ code }: React.KeyboardEvent<HTMLInputElement>) => {
     if (actionForKey(code) === Action.Quit) {
       setGameOver(true);
@@ -29,7 +35,7 @@ const GameController = ({
     handleInput(actionForKey(code));
   };
 
-  const handleInput = ( action: string ) => {
+  const handleInput = (action: string) => {
     PlayerController({
       action,
       board,
