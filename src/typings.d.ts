@@ -24,6 +24,12 @@ export interface Tetromino {
   className: string,
 }
 
+export interface TetrominoState {
+  board: TetrisBoard;
+  position: { row: number, column: number },
+  shape: number[][],
+}
+
 export interface Player {
   collided: boolean,
   isFastDropping: boolean,
