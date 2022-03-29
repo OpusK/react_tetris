@@ -80,6 +80,23 @@ export const randomTetromino = () => {
   return TETROMINOES[key] as Tetromino;
 };
 
+type RotateProps = {
+  piece: number[][];
+  direction: number;
+}
+
+export const rotate = ({ piece, direction }: RotateProps) => {
+  // Transpose rows and columns
+  const newPiece = piece.map((_, index) =>
+    piece.map((column) => column[index])
+  );
+
+  // Reverse rows to get a rotated matrix
+  if (direction > 0) return newPiece.map((row) => row.reverse());
+
+  return newPiece.reverse();
+};
+
 type Props = {
   className: string;
   isOccupied: boolean;
