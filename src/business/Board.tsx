@@ -1,7 +1,7 @@
-import { BoardSize, TetrisBoard, Player, TetrominoState } from "typings";
+import { BoardSize, TetrisBoard, Player, TetrominoState, Cell } from "typings";
 import { transferToBoard } from "business/Tetrominoes";
 
-const defaultCell = {
+const defaultCell: Cell = {
   occupied: false,
   className: "",
 };
@@ -40,6 +40,25 @@ export const nextBoard = ({ board, player, resetPlayer, addLinesCleared }: Props
     rows,
     shape: tetromino.shape
   });
+
+  // Check for cleared lines
+  const blankRow: Cell[] = rows[0].map((_) => ({ ...defaultCell }));
+  let linesCleared = 0;
+  let newRow: Cell[][];
+  rows = rows.reduce((acc: Cell[][], row) => {
+    if (row.every((column) => column.occupied)) {
+      linesCleared++;
+      acc.unshift(blankRow);
+    } else {
+      acc.push(row);
+    }
+
+    return acc;
+  }, []);
+
+  if (linesCleared > 0) {
+    addLinesCleared(linesCleared);
+  }
 
   // If we collided, reset the player!
   if (player.collided || player.isFastDropping) {
