@@ -10,22 +10,22 @@ type Props = {
 }
 
 export const useDropTime = ({ gameStats }: Props) => {
-  const [dropTime, setDropTime] = useState(defaultDropTime);
-  const [previousDropTime, setPreviousDropTime] = useState(0);
+  const [dropTime, setDropTime] = useState<number | null>(defaultDropTime);
+  const [previousDropTime, setPreviousDropTime] = useState<number | null>();
 
   const resumeDropTime = useCallback(() => {
     if (!previousDropTime) {
       return;
     }
     setDropTime(previousDropTime);
-    setPreviousDropTime(0);
+    setPreviousDropTime(null);
   }, [previousDropTime]);
 
   const pauseDropTime = useCallback(() => {
     if (dropTime) {
       setPreviousDropTime(dropTime);
     }
-    setDropTime(0);
+    setDropTime(null);
   }, [dropTime, setPreviousDropTime]);
 
   useEffect(() => {
