@@ -54,6 +54,20 @@ export const nextBoard = ({ board, player, resetPlayer, addLinesCleared }: Props
     row.map((cell) => (cell.occupied ? cell : { ...defaultCell }))
   );
 
+  const dropPosition = findDropPosition({
+    board,
+    position,
+    shape: tetromino.shape
+  });
+
+  rows = transferToBoard({
+    className: `${tetromino.className} ${player.isFastDropping ? "" : "ghost"}`,
+    isOccupied: player.isFastDropping,
+    position: dropPosition,
+    rows,
+    shape: tetromino.shape
+  });
+
   // Place the piece.
   // If it collided, mark the board cells as collided
   if (!player.isFastDropping) {
@@ -61,20 +75,6 @@ export const nextBoard = ({ board, player, resetPlayer, addLinesCleared }: Props
       className: tetromino.className,
       isOccupied: player.collided,
       position,
-      rows,
-      shape: tetromino.shape
-    });
-  } else {
-    const dropPosition = findDropPosition({
-      board,
-      position,
-      shape: tetromino.shape
-    });
-
-    rows = transferToBoard({
-      className: tetromino.className,
-      isOccupied: player.isFastDropping,
-      position: dropPosition,
       rows,
       shape: tetromino.shape
     });
