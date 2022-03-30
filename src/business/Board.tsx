@@ -1,5 +1,7 @@
 import { BoardSize, TetrisBoard, Player, TetrominoState, Cell } from "typings";
 import { transferToBoard } from "business/Tetrominoes";
+import { movePlayer } from "./PlayerController";
+
 
 const defaultCell: Cell = {
   occupied: false,
@@ -15,6 +17,25 @@ export const buildBoard = ({ rows, columns }: BoardSize) => {
     rows: builtRows,
     size: { rows, columns }
   };
+};
+
+const findDropPosition = ({ board, position, shape }: TetrominoState) => {
+  let max = board.size.rows - position.row + 1;
+  let row = 0;
+
+  for (let i = 0; i < max; i++) {
+    const delta = { row: i, column: 0 };
+    const result = movePlayer({ delta, position, shape, board });
+    const { collided } = result;
+
+    if (collided) {
+      break;
+    }
+
+    row = position.row + i;
+  }
+
+  return { ...position, row };
 };
 
 type Props = {
@@ -33,18 +54,35 @@ export const nextBoard = ({ board, player, resetPlayer, addLinesCleared }: Props
     row.map((cell) => (cell.occupied ? cell : { ...defaultCell }))
   );
 
-  rows = transferToBoard({
-    className: tetromino.className,
-    isOccupied: player.collided,
-    position,
-    rows,
-    shape: tetromino.shape
-  });
+  // Place the piece.
+  // If it collided, mark the board cells as collided
+  if (!player.isFastDropping) {
+    rows = transferToBoard({
+      className: tetromino.className,
+      isOccupied: player.collided,
+      position,
+      rows,
+      shape: tetromino.shape
+    });
+  } else {
+    const dropPosition = findDropPosition({
+      board,
+      position,
+      shape: tetromino.shape
+    });
+
+    rows = transferToBoard({
+      className: tetromino.className,
+      isOccupied: player.isFastDropping,
+      position: dropPosition,
+      rows,
+      shape: tetromino.shape
+    });
+  }
 
   // Check for cleared lines
   const blankRow: Cell[] = rows[0].map((_) => ({ ...defaultCell }));
   let linesCleared = 0;
-  let newRow: Cell[][];
   rows = rows.reduce((acc: Cell[][], row) => {
     if (row.every((column) => column.occupied)) {
       linesCleared++;
