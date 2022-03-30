@@ -25,14 +25,27 @@ const GameController = ({
   useInterval({ callback: () => { handleInput(Action.SlowDrop); }, delay: dropTime });
 
   const onKeyUp = ({ code }: React.KeyboardEvent<HTMLInputElement>) => {
-    if (actionForKey(code) === Action.Quit) {
-      setGameOver(true);
-    }
+    if (actionIsDrop(actionForKey(code))) resumeDropTime();
   };
 
   const onKeyDown = ({ code }: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(`onKeyDown ${code}`);
-    handleInput(actionForKey(code));
+    const action = actionForKey(code);
+
+    if (action === Action.Pause) {
+      if (dropTime) {
+        pauseDropTime();
+      } else {
+        resumeDropTime();
+      }
+    } else if (action === Action.Quit) {
+      setGameOver(true);
+    } else {
+      if (actionIsDrop(action)) pauseDropTime();
+      if (!dropTime) {
+        return;
+      }
+      handleInput(action);
+    }
   };
 
   const handleInput = (action: string) => {
