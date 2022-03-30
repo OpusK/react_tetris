@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 type Props = {
   callback: () => void;
-  delay: number;
+  delay: number | null;
 }
 
 export const useInterval = ({ callback, delay }: Props) => {
